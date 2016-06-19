@@ -7,7 +7,7 @@ server { \n
     listen 80;\n
     server_name localhost; \n
 \n
-    root /data/www/BotoStar/cms;\n
+    root /var/multrix;\n
     index index.html index.htm index.php;\n
 \n
     location / {\n
@@ -26,8 +26,8 @@ server { \n
         log_not_found     off;\n
         expires           5d;\n
     }\n
-    error_log /data/log/err.log;\n
-    access_log /data/log/acc.log;\n
+#    error_log /var/log/err.log;\n
+#    access_log /data/log/acc.log;\n
     # deny access to . files, for security\n
     #\n
     location ~ /\. {\n
@@ -39,6 +39,8 @@ server { \n
 EOF
 `
 echo $default > test/config/www.conf
+touch test/www/index.php
+echo "<?php echo phpinfo(); ?>" > test/www/index.php
 
 
 

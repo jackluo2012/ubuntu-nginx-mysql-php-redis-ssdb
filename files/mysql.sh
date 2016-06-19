@@ -73,3 +73,4 @@ fi
 
 exec /usr/bin/mysqld_safe
 mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'admin'"
+mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'admin'"
