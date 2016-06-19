@@ -1,5 +1,5 @@
 #FROM ubuntu:14.04
-FROM jackluo/ubuntu
+FROM index.alauda.cn/library/ubuntu:14.04
 MAINTAINER jackluo jackluo <net.webjoy@gmail.com>
 
 RUN DEBIAN_FRONTEND=noninteractive
