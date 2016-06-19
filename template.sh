@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-mkdir -vp  test/{data,log,www,config}
+#mkdir -vp  test/{data,log,www,config}
+mkdir -p test/log
+mkdir -p test/www
+mkdir -p test/config
+mkdir -p test/data
 touch test/config/www.conf
 default=`cat << EOF
 server { \n
