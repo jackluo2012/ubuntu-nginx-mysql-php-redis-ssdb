@@ -7,39 +7,35 @@ mkdir -p test/config
 mkdir -p test/data
 touch test/config/www.conf
 default=`cat << EOF
-server { \n
-    listen 80;\n
-    server_name localhost; \n
+server {\n
+\t    listen 80 default_server;\n
+\t    listen [::]:80 default_server ipv6only=on;\n
 \n
-    root /var/multrix;\n
-    index index.html index.htm index.php;\n
+\t    root /var/multrix;\n
+\t    index index.html index.htm index.php;\n
 \n
-    location / {\n
-        try_files $uri $uri/ /index.php;\n
-    }\n
+\t    # Make site accessible from http://localhost/
+\t    server_name localhost;\n
 \n
-    location ~ \.php$ {\n
-        try_files $uri =404;\n
+\t    location / {\n
+\t        # 如果找不到真实存在的文件，把请求分发至 index.php
+\t\t        try_files $uri $uri/ /index.php?$args;\n
+\t    }\n
 \n
-	fastcgi_pass unix:/var/run/php-fpm.sock;\n
-        include fastcgi_params;\n
-        fastcgi_param  SCRIPT_FILENAME $document_root/index.php;\n
-    }\n
-    location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ {\n
-        access_log        off;\n
-        log_not_found     off;\n
-        expires           5d;\n
-    }\n
-#    error_log /var/log/err.log;\n
-#    access_log /data/log/acc.log;\n
-    # deny access to . files, for security\n
-    #\n
-    location ~ /\. {\n
-            access_log off;\n
-            log_not_found off; \n
-            deny all;\n
-    }\n
+\t    # PHP\n
+\t    location ~ \.php$ {\n
+\t        fastcgi_buffer_size 128k;\n
+\t        fastcgi_buffers 32 32k;\n
+\t        try_files $uri =404;\n
+\t        fastcgi_pass   unix:/var/run/php5-fpm.sock;\n
+\t        fastcgi_index  index.php;\n
+\t        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;\n
+\t        fastcgi_param PATH_INFO $fastcgi_script_name;\n
+\t        include fastcgi_params;\n
+\t    }\n
+\n
 }\n
+\n
 EOF
 `
 echo $default > test/config/www.conf
